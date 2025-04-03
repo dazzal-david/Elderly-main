@@ -61,7 +61,7 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
     );
   }
 
-  Widget _buildMedicationCard(Medication medication) {
+    Widget _buildMedicationCard(Medication medication) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Padding(
@@ -81,9 +81,18 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => _showEditMedicationDialog(context, medication),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => _showEditMedicationDialog(context, medication),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      color: Colors.red,
+                      onPressed: () => _showDeleteConfirmationDialog(medication),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -120,6 +129,55 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  // Add this method to show the delete confirmation dialog
+  void _showDeleteConfirmationDialog(Medication medication) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Medication'),
+          content: Text('Are you sure you want to delete ${medication.name}?\nThis will also delete all medication logs.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                try {
+                  await _medicationService.deleteMedication(medication.id);
+                  if (mounted) {
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${medication.name} has been deleted'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error deleting medication: $e'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 

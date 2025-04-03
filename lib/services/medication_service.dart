@@ -312,6 +312,30 @@ class MedicationService {
     });
   }
 
+  // Add this method to your MedicationService class
+  Future<void> deleteMedication(String id) async {
+    try {
+      _checkAuthentication();
+      
+      // First, delete related logs
+      await _supabase
+          .from(_logsTable)
+          .delete()
+          .eq('medication_id', id)
+          .eq('username', _currentUser);
+
+      // Then delete the medication
+      await _supabase
+          .from(_tableName)
+          .delete()
+          .eq('id', id)
+          .eq('username', _currentUser);
+    } catch (e) {
+      print('Error in deleteMedication: $e');
+      throw Exception('Failed to delete medication: $e');
+    }
+  }
+
 
   // Add error handling for authentication errors
   void _checkAuthentication() {

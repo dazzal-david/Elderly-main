@@ -3,6 +3,8 @@ import 'package:elderly_care/services/auth_service.dart';
 import 'package:elderly_care/models/user_model.dart';
 import 'package:elderly_care/services/medication_service.dart';
 import 'package:elderly_care/screens/profile/edit_profile_screen.dart';
+import 'package:elderly_care/screens/profile/notifications_screen.dart';
+import 'package:elderly_care/screens/profile/help_support_screen.dart';
 import 'dart:math';
 
 class ProfileScreen extends StatefulWidget {
@@ -368,16 +370,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             title: const Text('Notifications'),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () {
-                              // TODO: Implement notifications settings
-                            },
-                          ),
-                          const Divider(height: 1),
-                          ListTile(
-                            leading: const Icon(Icons.security_outlined),
-                            title: const Text('Privacy & Security'),
-                            trailing: const Icon(Icons.chevron_right),
-                            onTap: () {
-                              // TODO: Implement privacy settings
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const NotificationsScreen(),
+                                ),
+                              );
                             },
                           ),
                           const Divider(height: 1),
@@ -386,7 +384,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             title: const Text('Help & Support'),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () {
-                              // TODO: Implement help section
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HelpSupportScreen(),
+                                ),
+                              );
                             },
                           ),
                         ],

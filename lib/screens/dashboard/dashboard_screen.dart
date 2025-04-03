@@ -50,11 +50,11 @@ class DashboardScreen extends StatelessWidget {
                     content: const Text('Are you sure you want to logout?'),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
+                        onPressed: () => Navigator.pop(context, false),
                         child: const Text('Cancel'),
                       ),
                       TextButton(
-                        onPressed: () => Navigator.of(context).pop(true),
+                        onPressed: () => Navigator.pop(context, true),
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.red,
                         ),
@@ -68,11 +68,11 @@ class DashboardScreen extends StatelessWidget {
                   try {
                     await AuthService().signOut();
                     if (context.mounted) {
-                      Navigator.of(context).pushAndRemoveUntil(
+                      Navigator.pushReplacement(
+                        context,
                         MaterialPageRoute(
                           builder: (context) => const LoginScreen(),
                         ),
-                        (route) => false,
                       );
                     }
                   } catch (e) {
